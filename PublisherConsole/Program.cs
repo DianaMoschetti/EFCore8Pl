@@ -24,7 +24,7 @@ void SortAuthors()
 {
     var authorsByLastname = _context.Authors
      .OrderBy(a => a.LastName)
-     //.ThenBy(a => a.FirstName)
+     .ThenBy(a => a.FirstName)
      .ToList();
 
     authorsByLastname.ForEach(a => Console.WriteLine(a.LastName + " " + a.FirstName));   
