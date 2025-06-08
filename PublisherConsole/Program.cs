@@ -3,23 +3,43 @@ using Microsoft.Identity.Client;
 using PublisherData;
 using PublisherDomain;
 
-using PubContext _context = new();
+
 //using (PubContext context = new PubContext())
 //{
 //    context.Database.EnsureCreated();
 //}
 
-//QueryFilters();
-//AddSomeMoreAuthors();
 //GetAuthors();
 //AddAuthor();
 //GetAuthors();
+
 //AddAuthorWithBook();
 //GetAuthorsWithBooks();
 
-//SkipAndTakeAuthors();
+using PubContext _context = new();
 
-SortAuthors();
+//QueryFilters();
+//AddSomeMoreAuthors();
+//SkipAndTakeAuthors();
+//SortAuthors();
+QueryAggregate();
+void QueryAggregate()
+{
+    //var author = _context.Authors.FirstOrDefault(a => a.LastName == "Lerman");
+    var author = _context.Authors.OrderByDescending(a => a.FirstName).FirstOrDefault(a =>a.LastName == "Lerman");
+
+    void GetAuthors()
+{
+    using var context = new PubContext();
+
+    var authors = context.Authors.ToList();
+    foreach (var author in authors)
+    {
+        Console.WriteLine(author.FirstName + " " + author.LastName);
+    }
+
+}
+
 void SortAuthors()
 {
     var authorsByLastname = _context.Authors
@@ -27,14 +47,14 @@ void SortAuthors()
      .ThenBy(a => a.FirstName)
      .ToList();
 
-    authorsByLastname.ForEach(a => Console.WriteLine(a.LastName + " " + a.FirstName));   
+    authorsByLastname.ForEach(a => Console.WriteLine(a.LastName + " " + a.FirstName));
 }
 void SkipAndTakeAuthors()
 {
     var groupSize = 2;
-    for(int i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
-        var authors = _context.Authors          
+        var authors = _context.Authors
             .Skip(i * groupSize)
             .Take(groupSize)
             .ToList();
@@ -51,11 +71,11 @@ void QueryFilters()
 {
     //var authors = _context.Authors.Where(a => a.FirstName == "Josie")
     //    .ToList();
-    
+
     //var firstName = "Josie";
     //var authors = _context.Authors.Where(a => a.FirstName == firstName)
     //    .ToList();
-    
+
     //var authors = _context.Authors.Where(a => EF.Functions.Like(a.LastName, "L%"))
     //    .ToList();
 
@@ -107,24 +127,14 @@ void AddAuthor()
 {
     var author = new Author
     {
-        FirstName = "Diana",
-        LastName = "Moschetti"
+        FirstName = "Julie",
+        LastName = "Lerman"
     };
     using var context = new PubContext();
     context.Authors.Add(author);
     context.SaveChanges();
 }
-void GetAuthors()
-{
-    using var context = new PubContext();
-    
-    var authors = context.Authors.ToList();
-    foreach (var author in authors)
-    {
-        Console.WriteLine(author.FirstName + " " + author.LastName);
-    }
-    
-}
+
 void AddSomeMoreAuthors()
 {
     _context.Authors.Add(new Author { FirstName = "Rhoda", LastName = "Lerman" });
